@@ -1,6 +1,3 @@
-# pocketfriendly
-PocketFriendly.xyz – A modern price comparison website that helps users find the best deals across Amazon, Flipkart, Myntra, and more in one place.
-
 # 🛍️ PocketFriendly.xyz
 
 PocketFriendly.xyz is a modern price comparison website that helps users find the best deals across multiple e-commerce platforms in one place.
