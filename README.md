@@ -45,7 +45,7 @@ Compare prices. Save money. Shop smarter.
 ---
 ## 🌐 Live Demo
 
-https://github.com/Shubham-Marothiya/pocketfriendly
+https://shubham-marothiya.github.io/pocketfriendly/
 
 
 
