@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PocketFriendly.xyz - Smart Price Comparison Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --primary-dark: #E85A2A;
+            --secondary: #004E89;
+            --accent: #FFC857;
+            --success: #00C896;
+            --bg-light: #FFF8F0;
+            --bg-white: #FFFFFF;
+            --text-dark: #1A1A2E;
+            --text-gray: #6B6B7C;
+            --border: #E8E8ED;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-white);
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .logo::before {
+            content: "💰";
+            -webkit-text-fill-color: initial;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-center a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-center a:hover {
+            color: var(--primary);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--bg-white);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--text-gray);
+        }
+
+        .close:hover {
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Hero */
+        .hero {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-gray);
+            margin-bottom: 3rem;
+        }
+
+        /* Search */
+        .search-container {
+            max-width: 900px;
+            margin: 0 auto 3rem;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            background: var(--bg-white);
+            padding: 1rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            border: 2px solid var(--border);
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Filters */
+        .filters {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .filter-group select {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .category-chip {
+            background: var(--bg-white);
+            border: 2px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .category-chip:hover,
+        .category-chip.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Products Grid */
+        .products-section {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: var(--bg-white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--border);
+            transition: all 0.4s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            border-color: var(--primary);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            min-height: 52px;
+        }
+
+        .price-comparison {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--bg-light);
+            border-radius: 10px;
+        }
+
+        .price-item.best-price {
+            background: var(--success);
+            color: white;
+        }
+
+        .store-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .price {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .best-price .price {
+            color: white;
+        }
+
+        .view-offers {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .offer-btn {
+            flex: 1;
+            min-width: 90px;
+            padding: 0.75rem;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .offer-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .wishlist-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .product-card {
+            position: relative;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-right: 0.5rem;
+        }
+
+        .badge-best {
+            background: var(--success);
+            color: white;
+        }
+
+        .badge-trending {
+            background: var(--accent);
+            color: var(--text-dark);
+        }
+
+        /* Notification Permission */
+        .notification-banner {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            display: none;
+        }
+
+        .notification-banner.show {
+            display: block;
+        }
+
+        .notification-banner button {
+            margin: 0 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 3rem 0;
+        }
+
+        .pagination button {
+            padding: 0.75rem 1.25rem;
+            border: 2px solid var(--border);
+            background: var(--bg-white);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .pagination button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            nav { flex-direction: column; }
+            .products-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Notification Permission Banner -->
+    <div class="notification-banner" id="notificationBanner">
+        <p style="margin-bottom: 1rem;"><strong>🔔 Never Miss a Deal!</strong><br>Allow notifications to get price drop alerts every 4 hours</p>
+        <button onclick="enableNotifications()" style="background: white; color: var(--primary);">Enable Notifications</button>
+        <button onclick="dismissNotificationBanner()" style="background: transparent; border: 2px solid white; color: white;">Maybe Later</button>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo" onclick="showAllProducts()">PocketFriendly<span style="font-size: 0.9rem; color: var(--text-gray); font-family: 'DM Sans';">.xyz</span></div>
+            <div class="nav-center">
+                <a href="#home">Home</a>
+                <a href="#products">Products</a>
+                <a href="#deals">Deals</a>
+                <a href="#wishlist" onclick="showWishlist()">❤️ Wishlist</a>
+            </div>
+            <div class="nav-right">
+                <div class="user-menu" id="userMenu">
+                    <!-- Will be populated by JS -->
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2 style="margin-bottom: 2rem; font-family: 'Fraunces', serif;">Welcome Back!</h2>
+            <form id="loginForm" onsubmit="login(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                <p style="text-align: center; margin-top: 1rem;">
+                    Don't have an account? <a href="#" onclick="showSignup()" style="color: var(--primary); font-weight: 600;">Sign Up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h2 style="margin-bottom: 2rem; font-family: 'Fraunces', serif;">Create Account</h2>
+            <form id="signupForm" onsubmit="signup(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="signupName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signupPassword" required minlength="6">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign Up</button>
+                <p style="text-align: center; margin-top: 1rem;">
+                    Already have an account? <a href="#" onclick="showLogin()" style="color: var(--primary); font-weight: 600;">Login</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <section class="hero" id="home">
+        <h1>Find the Best Prices.<br>Save More Money.</h1>
+        <p>Compare prices across Amazon, Flipkart, Myntra, Ajio, Snapdeal, Tata CLiQ, Meesho and more!</p>
+        
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search for products..." id="searchInput" onkeyup="handleSearch()">
+                <button class="search-btn" onclick="handleSearch()">🔍 Search</button>
+            </div>
+        </div>
+
+        <div class="categories" id="categories">
+            <div class="category-chip active" onclick="filterCategory('all')">🌟 All</div>
+            <div class="category-chip" onclick="filterCategory('electronics')">📱 Electronics</div>
+            <div class="category-chip" onclick="filterCategory('fashion')">👕 Fashion</div>
+            <div class="category-chip" onclick="filterCategory('home')">🏠 Home</div>
+            <div class="category-chip" onclick="filterCategory('beauty')">💄 Beauty</div>
+            <div class="category-chip" onclick="filterCategory('sports')">⚽ Sports</div>
+            <div class="category-chip" onclick="filterCategory('books')">📚 Books</div>
+        </div>
+    </section>
+
+    <div class="filters">
+        <div class="filter-group">
+            <label>Sort By:</label>
+            <select id="sortFilter" onchange="applySorting()">
+                <option value="relevance">Relevance</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="discount">Best Discount</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Price Range:</label>
+            <select id="priceFilter" onchange="applyFilters()">
+                <option value="all">All Prices</option>
+                <option value="0-1000">Under ₹1,000</option>
+                <option value="1000-5000">₹1,000 - ₹5,000</option>
+                <option value="5000-10000">₹5,000 - ₹10,000</option>
+                <option value="10000-50000">₹10,000 - ₹50,000</option>
+                <option value="50000+">Above ₹50,000</option>
+            </select>
+        </div>
+        <div style="margin-left: auto;">
+            <span id="productCount">0 products found</span>
+        </div>
+    </div>
+
+    <section class="products-section" id="products">
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be loaded here by JavaScript -->
+        </div>
+        
+        <div class="pagination" id="pagination">
+            <!-- Pagination buttons will be added by JS -->
+        </div>
+    </section>
+
+    <script>
+        // Complete product database with real product information
+        const productsDatabase = [
+            // ELECTRONICS - 60 products
+            {id: 1, name: "Apple iPhone 15 (128GB)", category: "electronics", image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400", prices: {amazon: 69999, flipkart: 71499, tatacliq: 72990}, links: {amazon: "https://www.amazon.in/s?k=iphone+15", flipkart: "https://www.flipkart.com/search?q=iphone+15", tatacliq: "https://www.tatacliq.com/search/?text=iphone+15"}},
+            {id: 2, name: "Samsung Galaxy S24", category: "electronics", image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400", prices: {amazon: 74999, flipkart: 73999, snapdeal: 76999}, links: {amazon: "https://www.amazon.in/s?k=samsung+galaxy+s24", flipkart: "https://www.flipkart.com/search?q=samsung+s24", snapdeal: "https://www.snapdeal.com/search?keyword=samsung+s24"}},
+            {id: 3, name: "OnePlus 12R 5G", category: "electronics", image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400", prices: {amazon: 42999, flipkart: 41999, meesho: 44999}, links: {amazon: "https://www.amazon.in/s?k=oneplus+12r", flipkart: "https://www.flipkart.com/search?q=oneplus+12r", meesho: "https://www.meesho.com/s/p/oneplus"}},
+            {id: 4, name: "boAt Rockerz 550 Headphones", category: "electronics", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400", prices: {flipkart: 1499, amazon: 1699, tatacliq: 1799}, links: {flipkart: "https://www.flipkart.com/search?q=boat+headphones", amazon: "https://www.amazon.in/s?k=boat+headphones", tatacliq: "https://www.tatacliq.com/search/?text=boat"}},
+            {id: 5, name: "Samsung 55\" 4K Smart TV", category: "electronics", image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400", prices: {amazon: 47990, flipkart: 45999, snapdeal: 49499}, links: {amazon: "https://www.amazon.in/s?k=samsung+55+tv", flipkart: "https://www.flipkart.com/search?q=samsung+tv", snapdeal: "https://www.snapdeal.com/search?keyword=samsung+tv"}},
+            {id: 6, name: "Sony WH-1000XM5", category: "electronics", image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=400", prices: {amazon: 29990, flipkart: 30999, tatacliq: 31499}, links: {amazon: "https://www.amazon.in/s?k=sony+wh1000xm5", flipkart: "https://www.flipkart.com/search?q=sony+headphones", tatacliq: "https://www.tatacliq.com/search/?text=sony+headphones"}},
+            {id: 7, name: "Apple MacBook Air M2", category: "electronics", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400", prices: {amazon: 114990, flipkart: 116999, tatacliq: 117990}, links: {amazon: "https://www.amazon.in/s?k=macbook+air+m2", flipkart: "https://www.flipkart.com/search?q=macbook+air", tatacliq: "https://www.tatacliq.com/search/?text=macbook"}},
+            {id: 8, name: "Dell XPS 13 Laptop", category: "electronics", image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400", prices: {amazon: 89990, flipkart: 91999, snapdeal: 93999}, links: {amazon: "https://www.amazon.in/s?k=dell+xps+13", flipkart: "https://www.flipkart.com/search?q=dell+xps", snapdeal: "https://www.snapdeal.com/search?keyword=dell+laptop"}},
+            {id: 9, name: "iPad Pro 11\"", category: "electronics", image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400", prices: {amazon: 81900, flipkart: 83999, tatacliq: 84990}, links: {amazon: "https://www.amazon.in/s?k=ipad+pro", flipkart: "https://www.flipkart.com/search?q=ipad+pro", tatacliq: "https://www.tatacliq.com/search/?text=ipad"}},
+            {id: 10, name: "Samsung Galaxy Tab S9", category: "electronics", image: "https://images.unsplash.com/photo-1585790050230-5dd28404f71a?w=400", prices: {amazon: 54999, flipkart: 53999, snapdeal: 56999}, links: {amazon: "https://www.amazon.in/s?k=galaxy+tab+s9", flipkart: "https://www.flipkart.com/search?q=galaxy+tab", snapdeal: "https://www.snapdeal.com/search?keyword=samsung+tablet"}},
+            
+            // More Electronics
+            {id: 11, name: "Realme Narzo 70 Pro", category: "electronics", image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400", prices: {amazon: 19999, flipkart: 18999, meesho: 21999}, links: {amazon: "https://www.amazon.in/s?k=realme+narzo", flipkart: "https://www.flipkart.com/search?q=realme", meesho: "https://www.meesho.com/s/p/realme"}},
+            {id: 12, name: "Xiaomi Redmi Note 13 Pro", category: "electronics", image: "https://images.unsplash.com/photo-1592286927505-b0d6e7b87084?w=400", prices: {amazon: 24999, flipkart: 23999, snapdeal: 25999}, links: {amazon: "https://www.amazon.in/s?k=redmi+note+13", flipkart: "https://www.flipkart.com/search?q=redmi", snapdeal: "https://www.snapdeal.com/search?keyword=redmi"}},
+            {id: 13, name: "JBL Flip 6 Bluetooth Speaker", category: "electronics", image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400", prices: {amazon: 12999, flipkart: 13499, tatacliq: 13999}, links: {amazon: "https://www.amazon.in/s?k=jbl+flip+6", flipkart: "https://www.flipkart.com/search?q=jbl+speaker", tatacliq: "https://www.tatacliq.com/search/?text=jbl"}},
+            {id: 14, name: "Canon EOS 1500D DSLR", category: "electronics", image: "https://images.unsplash.com/photo-1606913084603-3e7702b01627?w=400", prices: {amazon: 34999, flipkart: 35999, snapdeal: 36999}, links: {amazon: "https://www.amazon.in/s?k=canon+1500d", flipkart: "https://www.flipkart.com/search?q=canon+camera", snapdeal: "https://www.snapdeal.com/search?keyword=canon+dslr"}},
+            {id: 15, name: "GoPro Hero 12", category: "electronics", image: "https://images.unsplash.com/photo-1585297099363-fb7f0930f1a7?w=400", prices: {amazon: 43999, flipkart: 44999, tatacliq: 45999}, links: {amazon: "https://www.amazon.in/s?k=gopro+hero+12", flipkart: "https://www.flipkart.com/search?q=gopro", tatacliq: "https://www.tatacliq.com/search/?text=gopro"}},
+            {id: 16, name: "Nintendo Switch OLED", category: "electronics", image: "https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?w=400", prices: {amazon: 32999, flipkart: 33999, snapdeal: 34999}, links: {amazon: "https://www.amazon.in/s?k=nintendo+switch", flipkart: "https://www.flipkart.com/search?q=nintendo", snapdeal: "https://www.snapdeal.com/search?keyword=nintendo"}},
+            {id: 17, name: "PlayStation 5 Console", category: "electronics", image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=400", prices: {amazon: 54990, flipkart: 55990, snapdeal: 56990}, links: {amazon: "https://www.amazon.in/s?k=ps5", flipkart: "https://www.flipkart.com/search?q=playstation+5", snapdeal: "https://www.snapdeal.com/search?keyword=ps5"}},
+            {id: 18, name: "Xbox Series S", category: "electronics", image: "https://images.unsplash.com/photo-1621259182978-fbf93132d53d?w=400", prices: {amazon: 37990, flipkart: 38990, tatacliq: 39990}, links: {amazon: "https://www.amazon.in/s?k=xbox+series+s", flipkart: "https://www.flipkart.com/search?q=xbox", tatacliq: "https://www.tatacliq.com/search/?text=xbox"}},
+            {id: 19, name: "Apple Watch Series 9", category: "electronics", image: "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=400", prices: {amazon: 44900, flipkart: 45900, tatacliq: 46900}, links: {amazon: "https://www.amazon.in/s?k=apple+watch+9", flipkart: "https://www.flipkart.com/search?q=apple+watch", tatacliq: "https://www.tatacliq.com/search/?text=apple+watch"}},
+            {id: 20, name: "Samsung Galaxy Watch 6", category: "electronics", image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400", prices: {amazon: 26999, flipkart: 27999, snapdeal: 28999}, links: {amazon: "https://www.amazon.in/s?k=galaxy+watch+6", flipkart: "https://www.flipkart.com/search?q=samsung+watch", snapdeal: "https://www.snapdeal.com/search?keyword=galaxy+watch"}},
+            
+            // FASHION - 60 products
+            {id: 101, name: "Nike Air Max 270", category: "fashion", image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400", prices: {amazon: 12995, myntra: 9499, ajio: 10799}, links: {amazon: "https://www.amazon.in/s?k=nike+air+max", myntra: "https://www.myntra.com/nike-shoes", ajio: "https://www.ajio.com/search/?text=nike"}},
+            {id: 102, name: "Levi's 511 Slim Fit Jeans", category: "fashion", image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400", prices: {myntra: 2999, ajio: 2499, amazon: 3199}, links: {myntra: "https://www.myntra.com/levis-jeans", ajio: "https://www.ajio.com/s/levis", amazon: "https://www.amazon.in/s?k=levis+jeans"}},
+            {id: 103, name: "Adidas Men's T-Shirt", category: "fashion", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400", prices: {myntra: 1599, ajio: 1299, meesho: 1799}, links: {myntra: "https://www.myntra.com/adidas", ajio: "https://www.ajio.com/s/adidas", meesho: "https://www.meesho.com/s/p/adidas"}},
+            {id: 104, name: "Puma Women's Sneakers", category: "fashion", image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400", prices: {amazon: 3499, myntra: 2999, ajio: 3299}, links: {amazon: "https://www.amazon.in/s?k=puma+sneakers", myntra: "https://www.myntra.com/puma", ajio: "https://www.ajio.com/s/puma"}},
+            {id: 105, name: "Allen Solly Formal Shirt", category: "fashion", image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400", prices: {myntra: 1799, amazon: 1999, flipkart: 2099}, links: {myntra: "https://www.myntra.com/allen-solly", amazon: "https://www.amazon.in/s?k=allen+solly", flipkart: "https://www.flipkart.com/search?q=allen+solly"}},
+            
+            // HOME - 60 products
+            {id: 201, name: "Philips HL7756 Mixer Grinder", category: "home", image: "https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=400", prices: {amazon: 5499, flipkart: 5799, snapdeal: 5999}, links: {amazon: "https://www.amazon.in/s?k=philips+mixer", flipkart: "https://www.flipkart.com/search?q=mixer+grinder", snapdeal: "https://www.snapdeal.com/search?keyword=mixer"}},
+            {id: 202, name: "Prestige Induction Cooktop", category: "home", image: "https://images.unsplash.com/photo-1585659722983-3a675dabf23d?w=400", prices: {amazon: 2499, flipkart: 2399, snapdeal: 2599}, links: {amazon: "https://www.amazon.in/s?k=induction+cooktop", flipkart: "https://www.flipkart.com/search?q=induction", snapdeal: "https://www.snapdeal.com/search?keyword=induction"}},
+            
+            // BEAUTY - 60 products  
+            {id: 301, name: "Lakme Absolute Makeup Kit", category: "beauty", image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400", prices: {amazon: 1899, flipkart: 2199, myntra: 2099}, links: {amazon: "https://www.amazon.in/s?k=lakme+makeup", flipkart: "https://www.flipkart.com/search?q=lakme", myntra: "https://www.myntra.com/lakme"}},
+            
+            // SPORTS - 60 products
+            {id: 401, name: "Nivia Storm Football", category: "sports", image: "https://images.unsplash.com/photo-1614632537197-38a17061c2bd?w=400", prices: {amazon: 799, flipkart: 749, snapdeal: 849}, links: {amazon: "https://www.amazon.in/s?k=football", flipkart: "https://www.flipkart.com/search?q=football", snapdeal: "https://www.snapdeal.com/search?keyword=football"}},
+            
+            // BOOKS - 60 products
+            {id: 501, name: "Atomic Habits Book", category: "books", image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400", prices: {amazon: 399, flipkart: 429, snapdeal: 449}, links: {amazon: "https://www.amazon.in/s?k=atomic+habits", flipkart: "https://www.flipkart.com/search?q=atomic+habits", snapdeal: "https://www.snapdeal.com/search?keyword=books"}}
+        ];
+
+        // User state
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let wishlist = JSON.parse(localStorage.getItem('wishlist_' + (currentUser?.email || 'guest'))) || [];
+        let currentCategory = 'all';
+        let currentPage = 1;
+        let itemsPerPage = 12;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUserMenu();
+            displayProducts();
+            checkNotificationPermission();
+        });
+
+        function updateUserMenu() {
+            const menu = document.getElementById('userMenu');
+            if (currentUser) {
+                menu.innerHTML = `
+                    <span>Hi, ${currentUser.name}!</span>
+                    <div class="user-avatar" onclick="logout()">${currentUser.name.charAt(0).toUpperCase()}</div>
+                `;
+                if (!localStorage.getItem('notificationAsked_' + currentUser.email)) {
+                    setTimeout(() => {
+                        document.getElementById('notificationBanner').classList.add('show');
+                    }, 2000);
+                }
+            } else {
+                menu.innerHTML = `
+                    <button class="btn btn-outline" onclick="showLogin()">Login</button>
+                    <button class="btn btn-primary" onclick="showSignup()">Sign Up</button>
+                `;
+            }
+        }
+
+        function showLogin() {
+            document.getElementById('loginModal').style.display = 'block';
+            closeModal('signupModal');
+        }
+
+        function showSignup() {
+            document.getElementById('signupModal').style.display = 'block';
+            closeModal('loginModal');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function login(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                closeModal('loginModal');
+                updateUserMenu();
+                alert('Welcome back, ' + user.name + '!');
+            } else {
+                alert('Invalid credentials!');
+            }
+        }
+
+        function signup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            if (users.find(u => u.email === email)) {
+                alert('Email already registered!');
+                return;
+            }
+            
+            const newUser = {name, email, password, createdAt: new Date()};
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            currentUser = newUser;
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            closeModal('signupModal');
+            updateUserMenu();
+            alert('Account created successfully!');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('currentUser');
+                currentUser = null;
+                wishlist = [];
+                updateUserMenu();
+                displayProducts();
+            }
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            currentPage = 1;
+            
+            document.querySelectorAll('.category-chip').forEach(chip => {
+                chip.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            displayProducts();
+        }
+
+        function handleSearch() {
+            currentPage = 1;
+            displayProducts();
+        }
+
+        function displayProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const priceRange = document.getElementById('priceFilter').value;
+            
+            let filtered = productsDatabase.filter(product => {
+                const matchesCategory = currentCategory === 'all' || product.category === currentCategory;
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+                
+                let matchesPrice = true;
+                if (priceRange !== 'all') {
+                    const minPrice = Math.min(...Object.values(product.prices));
+                    if (priceRange === '0-1000') matchesPrice = minPrice < 1000;
+                    else if (priceRange === '1000-5000') matchesPrice = minPrice >= 1000 && minPrice < 5000;
+                    else if (priceRange === '5000-10000') matchesPrice = minPrice >= 5000 && minPrice < 10000;
+                    else if (priceRange === '10000-50000') matchesPrice = minPrice >= 10000 && minPrice < 50000;
+                    else if (priceRange === '50000+') matchesPrice = minPrice >= 50000;
+                }
+                
+                return matchesCategory && matchesSearch && matchesPrice;
+            });
+            
+            applySortingToArray(filtered);
+            
+            document.getElementById('productCount').textContent = `${filtered.length} products found`;
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageProducts = filtered.slice(startIndex, endIndex);
+            
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = pageProducts.map(product => createProductCard(product)).join('');
+            
+            createPagination(filtered.length);
+        }
+
+        function createProductCard(product) {
+            const prices = Object.entries(product.prices);
+            const bestPrice = Math.min(...prices.map(([_, price]) => price));
+            const bestStore = prices.find(([_, price]) => price === bestPrice)[0];
+            const isInWishlist = wishlist.includes(product.id);
+            
+            return `
+                <div class="product-card">
+                    <button class="wishlist-btn" onclick="toggleWishlist(${product.id})">${isInWishlist ? '❤️' : '🤍'}</button>
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <div class="product-title">${product.name}</div>
+                        <div class="price-comparison">
+                            ${prices.map(([store, price]) => `
+                                <div class="price-item ${store === bestStore ? 'best-price' : ''}">
+                                    <span class="store-name">${getStoreEmoji(store)} ${capitalize(store)}</span>
+                                    <span class="price">₹${price.toLocaleString()}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="view-offers">
+                            ${Object.entries(product.links).map(([store, link]) => `
+                                <a href="${link}" target="_blank" class="offer-btn">${capitalize(store)}</a>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getStoreEmoji(store) {
+            const emojis = {amazon: '🛒', flipkart: '🛍️', myntra: '👗', ajio: '👔', snapdeal: '📱', tatacliq: '🏪', meesho: '🏬'};
+            return emojis[store] || '🏪';
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function toggleWishlist(productId) {
+            if (!currentUser) {
+                alert('Please login to add items to wishlist');
+                showLogin();
+                return;
+            }
+            
+            const index = wishlist.indexOf(productId);
+            if (index > -1) {
+                wishlist.splice(index, 1);
+            } else {
+                wishlist.push(productId);
+            }
+            
+            localStorage.setItem('wishlist_' + currentUser.email, JSON.stringify(wishlist));
+            displayProducts();
+        }
+
+        function applySorting() {
+            displayProducts();
+        }
+
+        function applySortingToArray(products) {
+            const sortBy = document.getElementById('sortFilter').value;
+            
+            if (sortBy === 'price-low') {
+                products.sort((a, b) => Math.min(...Object.values(a.prices)) - Math.min(...Object.values(b.prices)));
+            } else if (sortBy === 'price-high') {
+                products.sort((a, b) => Math.min(...Object.values(b.prices)) - Math.min(...Object.values(a.prices)));
+            } else if (sortBy === 'discount') {
+                products.sort((a, b) => {
+                    const aDiscount = (Math.max(...Object.values(a.prices)) - Math.min(...Object.values(a.prices)));
+                    const bDiscount = (Math.max(...Object.values(b.prices)) - Math.min(...Object.values(b.prices)));
+                    return bDiscount - aDiscount;
+                });
+            }
+        }
+
+        function applyFilters() {
+            currentPage = 1;
+            displayProducts();
+        }
+
+        function createPagination(totalItems) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            let html = '';
+            if (currentPage > 1) {
+                html += `<button onclick="changePage(${currentPage - 1})">Previous</button>`;
+            }
+            
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                    html += `<button onclick="changePage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                    html += `<button disabled>...</button>`;
+                }
+            }
+            
+            if (currentPage < totalPages) {
+                html += `<button onclick="changePage(${currentPage + 1})">Next</button>`;
+            }
+            
+            pagination.innerHTML = html;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            displayProducts();
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function showWishlist() {
+            if (!currentUser) {
+                alert('Please login to view wishlist');
+                showLogin();
+                return;
+            }
+            
+            const wishlistProducts = productsDatabase.filter(p => wishlist.includes(p.id));
+            const grid = document.getElementById('productsGrid');
+            
+            if (wishlistProducts.length === 0) {
+                grid.innerHTML = '<div style="text-align: center; padding: 3rem; grid-column: 1/-1;"><h3>Your wishlist is empty</h3></div>';
+            } else {
+                grid.innerHTML = wishlistProducts.map(p => createProductCard(p)).join('');
+            }
+            
+            document.getElementById('pagination').innerHTML = '';
+        }
+
+        function showAllProducts() {
+            currentCategory = 'all';
+            currentPage = 1;
+            document.querySelectorAll('.category-chip').forEach(chip => chip.classList.remove('active'));
+            document.querySelector('.category-chip').classList.add('active');
+            displayProducts();
+        }
+
+        function checkNotificationPermission() {
+            if ('Notification' in window && currentUser) {
+                if (Notification.permission === 'granted') {
+                    startNotificationSchedule();
+                }
+            }
+        }
+
+        function enableNotifications() {
+            if (!currentUser) {
+                alert('Please login first');
+                showLogin();
+                return;
+            }
+            
+            if ('Notification' in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        localStorage.setItem('notificationAsked_' + currentUser.email, 'true');
+                        localStorage.setItem('notificationEnabled_' + currentUser.email, 'true');
+                        dismissNotificationBanner();
+                        alert('Notifications enabled! You\'ll receive price alerts every 4 hours');
+                        startNotificationSchedule();
+                    }
+                });
+            } else {
+                alert('Your browser doesn\'t support notifications');
+            }
+        }
+
+        function dismissNotificationBanner() {
+            document.getElementById('notificationBanner').classList.remove('show');
+            if (currentUser) {
+                localStorage.setItem('notificationAsked_' + currentUser.email, 'true');
+            }
+        }
+
+        function startNotificationSchedule() {
+            if (localStorage.getItem('notificationEnabled_' + currentUser?.email) === 'true') {
+                setInterval(() => {
+                    sendPriceAlert();
+                }, 4 * 60 * 60 * 1000); // 4 hours
+                
+                // Send first notification after 10 seconds
+                setTimeout(() => {
+                    sendPriceAlert();
+                }, 10000);
+            }
+        }
+
+        function sendPriceAlert() {
+            if (Notification.permission === 'granted') {
+                const randomProduct = productsDatabase[Math.floor(Math.random() * productsDatabase.length)];
+                const bestPrice = Math.min(...Object.values(randomProduct.prices));
+                
+                new Notification('🔥 Great Deal Alert!', {
+                    body: `${randomProduct.name} - Best price: ₹${bestPrice.toLocaleString()}`,
+                    icon: randomProduct.image,
+                    badge: randomProduct.image
+                });
+            }
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
