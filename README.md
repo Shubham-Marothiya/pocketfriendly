@@ -1,11 +1,11 @@
- 🛍️ PocketFriendly.xyz
+## 🛍️ PocketFriendly.xyz
 
 PocketFriendly.xyz is a modern price comparison website that helps users find the best deals across multiple e-commerce platforms in one place.
 
 Compare prices. Save money. Shop smarter.
 
 ---
-🚀 Features
+## 🚀 Features
 
 ✅ Product search functionality  
 ✅ Compare prices across 7+ platforms  
@@ -34,7 +34,7 @@ Compare prices. Save money. Shop smarter.
 - Responsive Design
 - Modern UI/UX
 
- ▶️ How to Use
+## ▶️ How to Use
 
 1. Open the website  
 2. Search for a product  
@@ -43,7 +43,7 @@ Compare prices. Save money. Shop smarter.
 5. Save money 💸
 
 ---
-🌐 Live Demo
+## 🌐 Live Demo
 
 https://github.com/Shubham-Marothiya/pocketfriendly
 
